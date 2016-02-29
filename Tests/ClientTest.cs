@@ -101,13 +101,15 @@ namespace Program.Objects.Stylist_Clients
       testClient1.Delete();
       List<Client> resultClients = testStylist1.GetClients();
       List<Client> testClientList = new List<Client> {testClient2};
-
-
+      // Console.WriteLine("RESULT CLIENTS: " + resultClients);
+      // Console.WriteLine(testClientList[0].GetName());
+      Console.WriteLine("TEST CLIENT LIST: " + testClientList[0].GetName());
       Assert.Equal(testClientList, resultClients);
     }
 
     public void Dispose()
     {
+      Stylist.DeleteAll();
       Client.DeleteAll();
     }
 

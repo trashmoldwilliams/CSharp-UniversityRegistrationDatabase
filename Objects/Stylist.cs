@@ -143,6 +143,85 @@ namespace Program.Objects.Stylist_Clients
       return foundStylist;
     }
 
+    public void AddClients(Client newClient)
+    {
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("INSERT INTO stylists_clients (stylist_id, client_id) VALUES (@StylistId, @ClientId)", conn);
+      SqlParameter stylistIdParameter = new SqlParameter();
+      stylistIdParameter.ParameterName = "@StylistId";
+      stylistIdParameter.Value = this.GetId();
+      cmd.Parameters.Add(stylistIdParameter);
+
+      SqlParameter clientIdParameter = new SqlParameter();
+      clientIdParameter.ParameterName = "@ClientId";
+      clientIdParameter.Value = newClient.GetId();
+      cmd.Parameters.Add(clientIdParameter);
+
+      cmd.ExecuteNonQuery();
+
+      if(conn != null)
+      {
+        conn.Close();
+      }
+    }
+
+    public List<Client> GetClients()
+     {
+       SqlConnection conn = DB.Connection();
+       SqlDataReader rdr = null;
+       conn.Open();
+
+       SqlCommand cmd = new SqlCommand("SELECT client_id FROM stylists_clients WHERE stylist_id = @StylistId;", conn);
+       SqlParameter stylistIdParameter = new SqlParameter();
+       stylistIdParameter.ParameterName = "@StylistId";
+       stylistIdParameter.Value = this.GetId();
+       cmd.Parameters.Add(stylistIdParameter);
+
+       rdr = cmd.ExecuteReader();
+
+       List<int>clientsIds = new List<int> {};
+       while(rdr.Read())
+       {
+         int ClientId = rdr.GetInt32(0);
+         clientsIds.Add(ClientId);
+       }
+       if (rdr != null)
+       {
+         rdr.Close();
+       }
+
+       List<Client> clients = new List<Client> {};
+       foreach (int ClientId in clientsIds)
+       {
+         SqlDataReader queryReader = null;
+         SqlCommand clientQuery = new SqlCommand("SELECT * FROM clients WHERE id = @ClientId;", conn);
+
+         SqlParameter clientIdParameter = new SqlParameter();
+         clientIdParameter.ParameterName = "@ClientId";
+         clientIdParameter.Value = ClientId;
+         clientQuery.Parameters.Add(clientIdParameter);
+
+         queryReader = clientQuery.ExecuteReader();
+         while(queryReader.Read())
+         {
+               int thisClientId = queryReader.GetInt32(0);
+               string clientDescription = queryReader.GetString(1);
+               Client foundClient = new Client(clientDescription, thisClientId);
+               clients.Add(foundClient);
+         }
+         if (queryReader != null)
+         {
+           queryReader.Close();
+         }
+       }
+       if (conn != null)
+       {
+         conn.Close();
+       }
+       return clients;
+     }
     // public List<Client> GetClients()
     // {
     //   SqlConnection conn = DB.Connection();

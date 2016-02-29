@@ -123,14 +123,17 @@ namespace Program.Objects.Stylist_Clients
       Stylist testStylist = new Stylist("Harry Styles");
       testStylist.Save();
 
+      Stylist testStylist2 = new Stylist("Billy Ray Cyrus");
+      testStylist2.Save();
+
       Client testClient = new Client("Zayne");
       testClient.Save();
 
       Client testClient2 = new Client("Zack and Cody");
-      testClient.Save();
+      testClient2.Save();
 
-      testStylist.AddClient(testClient);
-      testStylist2.AddClient(testClient2);
+      testStylist.AddClients(testClient);
+      testStylist.AddClients(testClient2);
 
       List<Client> result = testStylist.GetClients();
       List<Client> testList = new List<Client> {testClient, testClient2};
@@ -150,7 +153,7 @@ namespace Program.Objects.Stylist_Clients
       Client testClient2 = new Client("Thea");
       testClient2.Save();
 
-      testStylist.AddClient(testClient1);
+      testStylist.AddClients(testClient1);
       List<Client> savedClients = testStylist.GetClients();
       List<Client> testList = new List<Client> {testClient1};
 
@@ -161,6 +164,7 @@ namespace Program.Objects.Stylist_Clients
     //Leave at bottom of test
     public void Dispose()
     {
+      Client.DeleteAll();
       Stylist.DeleteAll();
     }
   }
