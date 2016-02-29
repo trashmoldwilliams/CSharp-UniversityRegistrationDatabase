@@ -203,7 +203,30 @@ namespace Program.Objects.Stylist_Clients
       }
     }
 
+    public void AddTask(Client newClient)
+    {
+      SqlConnection conn = DB.Connection();
+      conn.Open();
 
+      SqlCommand cmd = new SqlCommand("INSERT INTO stylists_clients (stylist_id, client_id) VALUES (@StylistId, @ClientId)", conn);
+      SqlParameter stylistIdParameter = new SqlParameter();
+      stylistIdParameter.ParameterName = "@StylistId";
+      stylistIdParameter.Value = this.GetId();
+      cmd.Parameters.Add(stylistIdParameter);
+
+      SqlParameter clientIdParameter = new SqlParameter();
+      clientIdParameter.ParameterName = "@ClientId";
+      clientIdParameter.Value = newClient.GetId();
+      cmd.Parameters.Add(clientIdParameter);
+
+      cmd.ExecuteNonQuery();
+
+      if(conn != null)
+      {
+        conn.Close();
+      }
+
+    }
 
     public static void DeleteAll()
     {
