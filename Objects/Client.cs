@@ -100,7 +100,7 @@ namespace Program.Objects.Stylist_Clients
       {
         rdr.Close();
       }
-
+       
       if(conn != null)
       {
         conn.Close();
@@ -207,6 +207,89 @@ namespace Program.Objects.Stylist_Clients
       conn.Open();
       SqlCommand cmd = new SqlCommand("DELETE FROM clients", conn);
       cmd.ExecuteNonQuery();
+    }
+public void AddStylist(Stylist newStylist)
+    {
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("INSERT INTO stylists_clients (stylist_id, client_id) VALUES (@StylistId, @ClientId);", conn);
+
+      SqlParameter stylistIdParameter = new SqlParameter();
+      stylistIdParameter.ParameterName = "@StylistId";
+      stylistIdParameter.Value = newStylist.GetId();
+      cmd.Parameters.Add(stylistIdParameter);
+
+      SqlParameter clientIdParameter = new SqlParameter();
+      clientIdParameter.ParameterName = "@ClientId";
+      clientIdParameter.Value = this.GetId();
+      cmd.Parameters.Add(clientIdParameter);
+
+      cmd.ExecuteNonQuery();
+
+      if (conn != null)
+      {
+        conn.Close();
+      }
+    }
+
+    public List<Stylist> GetStylists()
+    {
+      SqlConnection conn = DB.Connection();
+      SqlDataReader rdr = null;
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("SELECT stylist_id FROM stylists_clients WHERE client_id = @ClientId;", conn);
+
+      SqlParameter clientIdParameter = new SqlParameter();
+      clientIdParameter.ParameterName = "@ClientId";
+      clientIdParameter.Value = this.GetId();
+      cmd.Parameters.Add(clientIdParameter);
+
+      rdr = cmd.ExecuteReader();
+
+      List<int> stylistIds = new List<int> {};
+
+      while (rdr.Read())
+      {
+        int stylistId = rdr.GetInt32(0);
+        stylistIds.Add(stylistId);
+      }
+      if (rdr != null)
+      {
+        rdr.Close();
+      }
+
+      List<Stylist> stylists = new List<Stylist> {};
+
+      foreach (int stylistId in stylistIds)
+      {
+        SqlDataReader queryReader = null;
+        SqlCommand stylistQuery = new SqlCommand("SELECT * FROM stylists WHERE id = @StylistId;", conn);
+
+        SqlParameter stylistIdParameter = new SqlParameter();
+        stylistIdParameter.ParameterName = "@StylistId";
+        stylistIdParameter.Value = stylistId;
+        stylistQuery.Parameters.Add(stylistIdParameter);
+
+        queryReader = stylistQuery.ExecuteReader();
+        while (queryReader.Read())
+        {
+          int thisStylistId = queryReader.GetInt32(0);
+          string stylistName = queryReader.GetString(1);
+          Stylist foundStylist = new Stylist(stylistName, thisStylistId);
+          stylists.Add(foundStylist);
+        }
+        if (queryReader != null)
+        {
+          queryReader.Close();
+        }
+      }
+      if (conn != null)
+      {
+        conn.Close();
+      }
+      return stylists;
     }
   }
 }

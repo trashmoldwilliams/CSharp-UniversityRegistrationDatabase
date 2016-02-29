@@ -106,7 +106,47 @@ namespace Program.Objects.Stylist_Clients
       Console.WriteLine("TEST CLIENT LIST: " + testClientList[0].GetName());
       Assert.Equal(testClientList, resultClients);
     }
+    [Fact]
+    public void Test_AddStylist_AddsStylistToClient()
+    {
+      //Arrange
+      Client testClient = new Client("Cinammon guy");
+      testClient.Save();
 
+      Stylist testStylist = new Stylist("Wonder woman");
+      testStylist.Save();
+
+      //Act
+      testClient.AddStylist(testStylist);
+
+      List<Stylist> result = testClient.GetStylists();
+      List<Stylist> testList = new List<Stylist>{testStylist};
+
+      //Assert
+      Assert.Equal(testList, result);
+    }
+    [Fact]
+    public void Test_GetStylists_ReturnsAllClientStylists()
+    {
+      //Arrange
+      Client testClient = new Client("Billy the goat");
+      testClient.Save();
+
+      Stylist testStylist1 = new Stylist("Bob the builder");
+      testStylist1.Save();
+
+      Stylist testStylist2 = new Stylist("Hydroflask");
+      testStylist2.Save();
+
+      //Act
+      testClient.AddStylist(testStylist1);
+      List<Stylist> result = testClient.GetStylists();
+      List<Stylist> testList = new List<Stylist> {testStylist1};
+
+      //Assert
+      Assert.Equal(testList, result);
+    }
+    
     public void Dispose()
     {
       Stylist.DeleteAll();
