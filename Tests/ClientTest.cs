@@ -24,8 +24,8 @@ namespace Program.Objects.Stylist_Clients
     [Fact]
     public void Test_EqualOverrie_TrueForSameName()
     {
-      var clientOne = new Client("Wolverine", 1);
-      var clientTwo = new Client("Wolverine", 1);
+      var clientOne = new Client("Wolverine");
+      var clientTwo = new Client("Wolverine");
 
       Assert.Equal(clientOne, clientTwo);
     }
@@ -33,7 +33,7 @@ namespace Program.Objects.Stylist_Clients
     [Fact]
     public void Test_Save_SavesClientDataBase()
     {
-      var testClient = new Client("Batman", 1);
+      var testClient = new Client("Batman");
       testClient.Save();
 
       var testList = new List<Client>{testClient};
@@ -45,7 +45,7 @@ namespace Program.Objects.Stylist_Clients
     [Fact]
     public void Test_SaveAssignsIdToOBjects()
     {
-      var testClient = new Client("Blade", 1);
+      var testClient = new Client("Blade");
       testClient.Save();
 
       var savedClient = Client.GetAll()[0];
@@ -59,7 +59,7 @@ namespace Program.Objects.Stylist_Clients
     [Fact]
     public void Test_FindClientInDataBase()
     {
-      var testClient = new Client("Timone", 1);
+      var testClient = new Client("Timone");
       testClient.Save();
 
       var foundClient = Client.Find(testClient.GetId());
@@ -71,14 +71,14 @@ namespace Program.Objects.Stylist_Clients
     public void Test_Update_UpdatesClientInDataBase()
     {
       string name = "Poomba";
-      var testClient = new Client(name, 1);
+      var testClient = new Client(name);
       testClient.Save();
 
       string newName = "Simba";
       testClient.Update(newName);
 
-      Client result = new Client(testClient.GetName(), 1);
-      Client newClient = new Client(newName, 1);
+      Client result = new Client(testClient.GetName());
+      Client newClient = new Client(newName);
       // string result = testClient.GetName();
 
       Assert.Equal(newClient, result);
@@ -92,9 +92,9 @@ namespace Program.Objects.Stylist_Clients
       Stylist testStylist1 = new Stylist(nameOne);
       testStylist1.Save();
 
-      Client testClient1 = new Client("Piglet", testStylist1.GetId());
+      Client testClient1 = new Client("Piglet");
       testClient1.Save();
-      Client testClient2 = new Client("Roo", testStylist1.GetId());
+      Client testClient2 = new Client("Roo");
       testClient2.Save();
 
 
