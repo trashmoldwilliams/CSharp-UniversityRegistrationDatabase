@@ -138,6 +138,26 @@ namespace Program.Objects.Stylist_Clients
       Assert.Equal(testList, result);
     }
 
+    [Fact]
+    public void Test_GetClients_ReturnsAllStylistsClients()
+    {
+      Stylist testStylist = new Stylist("Tim");
+      testStylist.Save();
+
+      Client testClient1 = new Client("Andrew");
+      testClient1.Save();
+
+      Client testClient2 = new Client("Thea");
+      testClient2.Save();
+
+      testStylist.AddClient(testClient1);
+      List<Client> savedClients = testStylist.GetClients();
+      List<Client> testList = new List<Client> {testClient1};
+
+      Assert.Equal(testList, savedClients);
+
+    }
+
     //Leave at bottom of test
     public void Dispose()
     {
