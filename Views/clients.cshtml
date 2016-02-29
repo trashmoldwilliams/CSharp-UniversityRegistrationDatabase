@@ -1,0 +1,38 @@
+<h2>Here are @Model["stylist"].GetName() clients:</h2>
+
+@if(Model["clients"].Count == 0)
+{
+  <h3>Ooops, @Model["stylist"].GetName() doesn't have any clients</h3>
+}
+else
+{
+  @foreach(var client in @Model["clients"])
+  {
+    <li>
+      @client.GetName() |
+      <a href="/client/edit/@client.GetId()">Edit</a>
+      <form action="/client/delete/@client.GetId()" method="post">
+        <input type="hidden" name="_method" value="DELETE">
+        <button type="submit">Delete</button>
+      </form>
+    </li>
+  }
+}
+
+<h3><a href="/stylists">Return back to stylists</a></h3>
+<br>
+<h3>Add a new client:</h3>
+<form action='/stylists/@Model["stylist"].GetId()/new' method="post">
+  <label for="name">Name:</label>
+  <input id="name" name="name" type="text">
+  <br>
+  <label for="stylist-id">Stylist:</label>
+  <select name="stylist-id">
+    @foreach (var stylist in @Model["stylists"])
+    {
+      <option value="@stylist.GetId()">@stylist.GetName()</option>
+    }
+  </select>
+  <br>
+  <button type="submit">Add new client</button>
+</form>
