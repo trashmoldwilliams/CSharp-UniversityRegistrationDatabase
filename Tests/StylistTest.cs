@@ -67,23 +67,23 @@ namespace Program.Objects.Stylist_Clients
       Assert.Equal(testStylist, foundStylist);
     }
 
-    [Fact]
-    public void Test_GetClients_RetrieveAllClientsWithStylist()
-    {
-      var testStylist = new Stylist("Marco");
-      testStylist.Save();
-
-      var clientOne = new Client("Johnathon", testStylist.GetId(), 1);
-      clientOne.Save();
-
-      var clientTwo = new Client("Bobbie", testStylist.GetId(), 2);
-      clientTwo.Save();
-
-      var testClientList = new List<Client> {clientOne, clientTwo};
-      var resultClientList = testStylist.GetClients();
-
-      Assert.Equal(testClientList, resultClientList);
-    }
+    // [Fact]
+    // public void Test_GetClients_RetrieveAllClientsWithStylist()
+    // {
+    //   var testStylist = new Stylist("Marco");
+    //   testStylist.Save();
+    //
+    //   var clientOne = new Client("Johnathon", testStylist.GetId(), 1);
+    //   clientOne.Save();
+    //
+    //   var clientTwo = new Client("Bobbie", testStylist.GetId(), 2);
+    //   clientTwo.Save();
+    //
+    //   var testClientList = new List<Client> {clientOne, clientTwo};
+    //   var resultClientList = testStylist.GetClients();
+    //
+    //   Assert.Equal(testClientList, resultClientList);
+    // }
 
     [Fact]
     public void Test_Update_UpdatesStylistInDataBase()
@@ -117,7 +117,26 @@ namespace Program.Objects.Stylist_Clients
       Assert.Equal(testStylistList, resultStylists);
 
     }
+    [Fact]
+    public void Test_AddClient_AddClientToStylist()
+    {
+      Stylist testStylist = new Stylist("Harry Styles");
+      testStylist.Save();
 
+      Client testClient = new Client("Zayne");
+      testClient.Save();
+
+      Client testClient2 = new Client("Zack and Cody");
+      testClient.Save();
+
+      testStylist.AddClient(testClient);
+      testStylist2.AddClient(testClient2);
+
+      List<Client> result = testStylist.GetClients();
+      List<Client> testList = new List<Client> {testClient, testClient2};
+
+      Assert.Equal(testList, result);
+    }
 
     //Leave at bottom of test
     public void Dispose()

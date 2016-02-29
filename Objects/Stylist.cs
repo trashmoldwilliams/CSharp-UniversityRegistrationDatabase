@@ -143,42 +143,42 @@ namespace Program.Objects.Stylist_Clients
       return foundStylist;
     }
 
-    public List<Client> GetClients()
-    {
-      SqlConnection conn = DB.Connection();
-      SqlDataReader rdr = null;
-      conn.Open();
-
-      var cmd = new SqlCommand("SELECT * FROM clients WHERE stylist_id = @StylistId;", conn);
-      var stylistIdParameter = new SqlParameter();
-      stylistIdParameter.ParameterName = "@StylistId";
-      stylistIdParameter.Value = this.GetId();
-      cmd.Parameters.Add(stylistIdParameter);
-      rdr = cmd.ExecuteReader();
-
-      var clients = new List<Client> {};
-      while(rdr.Read())
-      {
-        int ClientId = rdr.GetInt32(0);
-        string ClientName = rdr.GetString(1);
-        int ClientStylistId = rdr.GetInt32(2);
-
-        var newClient = new Client(ClientName, ClientStylistId, ClientId);
-        clients.Add(newClient);
-      }
-
-      if(rdr != null)
-      {
-        rdr.Close();
-      }
-
-      if(conn != null)
-      {
-        conn.Close();
-      }
-
-      return clients;
-    }
+    // public List<Client> GetClients()
+    // {
+    //   SqlConnection conn = DB.Connection();
+    //   SqlDataReader rdr = null;
+    //   conn.Open();
+    //
+    //   var cmd = new SqlCommand("SELECT * FROM clients WHERE stylist_id = @StylistId;", conn);
+    //   var stylistIdParameter = new SqlParameter();
+    //   stylistIdParameter.ParameterName = "@StylistId";
+    //   stylistIdParameter.Value = this.GetId();
+    //   cmd.Parameters.Add(stylistIdParameter);
+    //   rdr = cmd.ExecuteReader();
+    //
+    //   var clients = new List<Client> {};
+    //   while(rdr.Read())
+    //   {
+    //     int ClientId = rdr.GetInt32(0);
+    //     string ClientName = rdr.GetString(1);
+    //     int ClientStylistId = rdr.GetInt32(2);
+    //
+    //     var newClient = new Client(ClientName, ClientStylistId, ClientId);
+    //     clients.Add(newClient);
+    //   }
+    //
+    //   if(rdr != null)
+    //   {
+    //     rdr.Close();
+    //   }
+    //
+    //   if(conn != null)
+    //   {
+    //     conn.Close();
+    //   }
+    //
+    //   return clients;
+    // }
 
     public void Update(string newStylistName)
     {
@@ -220,7 +220,7 @@ namespace Program.Objects.Stylist_Clients
       SqlConnection conn = DB.Connection();
       conn.Open();
 
-      var cmd = new SqlCommand("DELETE FROM stylists WHERE id = @StylistId; DELETE FROM clients WHERE stylist_id = @StylistId;", conn);
+      var cmd = new SqlCommand("DELETE FROM stylists WHERE id = @StylistId;", conn);
 
       var stylistIdParameter = new SqlParameter();
       stylistIdParameter.ParameterName = "@StylistId";
