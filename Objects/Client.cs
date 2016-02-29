@@ -10,13 +10,11 @@ namespace Program.Objects.Stylist_Clients
   {
     private int _id;
     private string _client_name;
-    private int _stylist_id;
 
-    public Client(string ClientName, int StylistId, int Id = 0)
+    public Client(string ClientName, int Id = 0)
     {
       _id = Id;
       _client_name = ClientName;
-      _stylist_id = StylistId;
     }
 
     public override bool Equals(System.Object otherClient)
@@ -30,9 +28,8 @@ namespace Program.Objects.Stylist_Clients
         var newClient = (Client) otherClient;
         bool idEquality = this.GetId() == newClient.GetId();
         bool nameEquality = this.GetName() == newClient.GetName();
-        bool stylistIdEquality = this.GetStylistId() == newClient.GetStylistId();
 
-        return (idEquality && nameEquality && stylistIdEquality);
+        return (idEquality && nameEquality);
       }
     }
 
@@ -44,11 +41,6 @@ namespace Program.Objects.Stylist_Clients
     public string GetName()
     {
       return _client_name;
-    }
-
-    public int GetStylistId()
-    {
-      return _stylist_id;
     }
 
     public static List<Client> GetAll()
@@ -66,9 +58,8 @@ namespace Program.Objects.Stylist_Clients
       {
         int ClientId = rdr.GetInt32(0);
         string ClientName = rdr.GetString(1);
-        int ClientStylistId = rdr.GetInt32(2);
 
-        var newClient = new Client(ClientName, ClientStylistId, ClientId);
+        var newClient = new Client(ClientName, ClientId);
         AllClients.Add(newClient);
       }
 
@@ -91,18 +82,14 @@ namespace Program.Objects.Stylist_Clients
       SqlDataReader rdr;
       conn.Open();
 
-      var cmd = new SqlCommand("INSERT INTO clients (client_name, stylist_id) OUTPUT INSERTED.id VALUES (@ClientName, @ClientStylistId);", conn);
+      var cmd = new SqlCommand("INSERT INTO clients (client_name) OUTPUT INSERTED.id VALUES (@ClientName);", conn);
 
       var nameParameter = new SqlParameter();
       nameParameter.ParameterName = "@ClientName";
       nameParameter.Value = this.GetName();
 
-      var stylistIdParameter = new SqlParameter();
-      stylistIdParameter.ParameterName = "@ClientStylistId";
-      stylistIdParameter.Value = this.GetStylistId();
 
       cmd.Parameters.Add(nameParameter);
-      cmd.Parameters.Add(stylistIdParameter);
 
       rdr = cmd.ExecuteReader();
 
@@ -137,16 +124,15 @@ namespace Program.Objects.Stylist_Clients
 
       int foundClientId = 0;
       string foundClientName = null;
-      int foundClientStylistId = 0;
+
 
       while(rdr.Read())
       {
         foundClientId = rdr.GetInt32(0);
         foundClientName = rdr.GetString(1);
-        foundClientStylistId = rdr.GetInt32(2);
       }
 
-      var foundClient = new Client(foundClientName, foundClientStylistId, foundClientId);
+      var foundClient = new Client(foundClientName, foundClientId);
 
       if(rdr != null)
       {
