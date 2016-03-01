@@ -20,70 +20,73 @@ namespace Program.Objects.Students_Courses
 
       Assert.Equal(0, result);
     }
-    //
-    // [Fact]
-    // public void Test_Equal_ReturnsTrueForSameName()
-    // {
-    //   var StylistOne = new Stylist("Roberto");
-    //   var StylistTwo = new Stylist("Roberto");
-    //
-    //   Assert.Equal(StylistOne, StylistTwo);
-    // }
-    //
-    // [Fact]
-    // public void Test_Save_SavesStylistToDataBase()
-    // {
-    //   var testStylist = new Stylist("Alice");
-    //   testStylist.Save();
-    //
-    //   var result = Stylist.GetAll();
-    //   var testList = new List<Stylist>{testStylist};
-    //
-    //   Assert.Equal(testList, result);
-    // }
-    //
-    // [Fact]
-    // public void Test_Save_AssignsIdToStylistObject()
-    // {
-    //   var testStylist = new Stylist("Mr. Chop");
-    //   testStylist.Save();
-    //
-    //   var savedStylist = Stylist.GetAll()[0];
-    //
-    //   int result = savedStylist.GetId();
-    //   int testId = testStylist.GetId();
-    //
-    //   Assert.Equal(testId, result);
-    // }
-    //
-    // [Fact]
-    // public void Test_Find_FindsStylistInDataBase()
-    // {
-    //   var testStylist = new Stylist("Edward Scissorhands");
-    //   testStylist.Save();
-    //
-    //   var foundStylist = Stylist.Find(testStylist.GetId());
-    //
-    //   Assert.Equal(testStylist, foundStylist);
-    // }
-    //
-    // // [Fact]
-    // // public void Test_GetClients_RetrieveAllClientsWithStylist()
-    // // {
-    // //   var testStylist = new Stylist("Marco");
-    // //   testStylist.Save();
-    // //
-    // //   var clientOne = new Client("Johnathon", testStylist.GetId(), 1);
-    // //   clientOne.Save();
-    // //
-    // //   var clientTwo = new Client("Bobbie", testStylist.GetId(), 2);
-    // //   clientTwo.Save();
-    // //
-    // //   var testClientList = new List<Client> {clientOne, clientTwo};
-    // //   var resultClientList = testStylist.GetClients();
-    // //
-    // //   Assert.Equal(testClientList, resultClientList);
-    // // }
+
+    [Fact]
+    public void Test_Equal_ReturnsTrueForSameName()
+    {
+      var StudentOne = new Student("Roberto", new DateTime (2016,2,2));
+      var StudentTwo = new Student("Roberto", new DateTime(2016,2,2));
+
+      Assert.Equal(StudentOne, StudentTwo);
+    }
+
+    [Fact]
+    public void Test_Save_SavesStudentToDataBase()
+    {
+      var testStudent = new Student("Alice", new DateTime(2000,5,9));
+      testStudent.Save();
+
+      var result = Student.GetAll();
+      var testList = new List<Student>{testStudent};
+
+      Assert.Equal(testList, result);
+    }
+
+    [Fact]
+    public void Test_Save_AssignsIdToStudentObject()
+    {
+      var testStudent = new Student("Mr. Chop", new DateTime(1789, 1, 1));
+      testStudent.Save();
+
+      var savedStudent = Student.GetAll()[0];
+
+      int result = savedStudent.GetId();
+      int testId = testStudent.GetId();
+
+      Assert.Equal(testId, result);
+    }
+
+    [Fact]
+    public void Test_Find_FindsStudentInDataBase()
+    {
+      var testStudent = new Student("Edward Scissorhands", new DateTime(2020, 12, 10));
+      testStudent.Save();
+
+      var foundStudent = Student.Find(testStudent.GetId());
+
+      Assert.Equal(testStudent, foundStudent);
+    }
+
+    [Fact]
+    public void Test_GetCourses_RetrieveAllCoursesWithStudents()
+    {
+      var testStudent = new Student("Marco", new DateTime(1995, 9, 21));
+      testStudent.Save();
+
+      var courseOne = new Course("Johnathon", "123");
+      courseOne.Save();
+
+      var courseTwo = new Course("Bobbie", "43298");
+      courseTwo.Save();
+
+      testStudent.AddCourses(courseOne);
+      testStudent.AddCourses(courseTwo);
+
+      var testCourseList = new List<Course> {courseOne, courseTwo};
+      var resultCourseList = testStudent.GetCourses();
+
+      Assert.Equal(testCourseList, resultCourseList);
+    }
     //
     // [Fact]
     // public void Test_Update_UpdatesStylistInDataBase()

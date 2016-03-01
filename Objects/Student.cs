@@ -64,13 +64,15 @@ namespace Program.Objects.Students_Courses
 
       while(rdr.Read())
       {
+
         var StudentId = rdr.GetInt32(0);
         var StudentName = rdr.GetString(1);
         var StudentDate = rdr.GetDateTime(2);
+        Console.WriteLine("eauirgriuhartigh");
 
         var newStudent = new Student(StudentName, StudentDate, StudentId);
-
         allStudents.Add(newStudent);
+
       }
 
       if(rdr != null)
@@ -92,11 +94,17 @@ namespace Program.Objects.Students_Courses
       SqlDataReader rdr;
       conn.Open();
 
-      var cmd = new SqlCommand("INSERT INTO students (student_name) OUTPUT INSERTED.id VALUES (@StudentName);", conn);
+      var cmd = new SqlCommand("INSERT INTO students (name, dateOfEnrollement) OUTPUT INSERTED.id VALUES (@StudentName, @StudentDate);", conn);
       var nameParameter = new SqlParameter();
       nameParameter.ParameterName = "@StudentName";
       nameParameter.Value = this.GetName();
+
+      var dateParameter = new SqlParameter();
+      dateParameter.ParameterName = "@StudentDate";
+      dateParameter.Value = this.GetDateTime();
+
       cmd.Parameters.Add(nameParameter);
+      cmd.Parameters.Add(dateParameter);
       rdr = cmd.ExecuteReader();
 
       while(rdr.Read())
@@ -184,7 +192,7 @@ namespace Program.Objects.Students_Courses
        SqlDataReader rdr = null;
        conn.Open();
 
-       SqlCommand cmd = new SqlCommand("SELECT course_id FROM student_course WHERE student_id = @StudentId;", conn);
+       SqlCommand cmd = new SqlCommand("SELECT course_id FROM students_courses WHERE student_id = @StudentId;", conn);
        SqlParameter studentIdParameter = new SqlParameter();
        studentIdParameter.ParameterName = "@StudentId";
        studentIdParameter.Value = this.GetId();
