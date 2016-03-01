@@ -1,7 +1,7 @@
 using System.Data;
 using System.Data.SqlClient;
 
-namespace Program.Objects.Stylist_Clients
+namespace Program.Objects.Students_Courses
 {
   public class DB
   {

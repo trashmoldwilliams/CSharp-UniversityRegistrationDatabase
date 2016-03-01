@@ -5,7 +5,7 @@ using Nancy;
 using Nancy.ViewEngines.Razor;
 using System.Collections.Generic;
 
-namespace Program.Objects.Stylist_Clients
+namespace Program.Objects.Students_Courses
 {
 
   public class Startup
@@ -41,6 +41,6 @@ namespace Program.Objects.Stylist_Clients
   }
   public static class DBConfiguration
   {
-    public static string ConnectionString = "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=hair_salon;Integrated Security=SSPI";
+    public static string ConnectionString = "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=UniversityReg;Integrated Security=SSPI";
   }
 }
