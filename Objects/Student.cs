@@ -68,7 +68,6 @@ namespace Program.Objects.Students_Courses
         var StudentId = rdr.GetInt32(0);
         var StudentName = rdr.GetString(1);
         var StudentDate = rdr.GetDateTime(2);
-        Console.WriteLine("eauirgriuhartigh");
 
         var newStudent = new Student(StudentName, StudentDate, StudentId);
         allStudents.Add(newStudent);
@@ -243,40 +242,40 @@ namespace Program.Objects.Students_Courses
        return courses;
      }
 
-    public void Update(string newStudentName)
-    {
-      SqlConnection conn = DB.Connection();
-      SqlDataReader rdr;
-      conn.Open();
+     public void Update(string newStudentName, DateTime newStudentDate)
+     {
+       SqlConnection conn = DB.Connection();
+       SqlDataReader rdr;
+       conn.Open();
 
-      var cmd = new SqlCommand("UPDATE students SET student_name = @NewStudentName OUTPUT INSERTED.student_name WHERE id = @StudentName;", conn);
+       var cmd = new SqlCommand("UPDATE students SET name = @NewStudentName OUTPUT INSERTED.name WHERE id = @StudentId;", conn);
 
-      var newStudentIdParameter = new SqlParameter();
-      newStudentIdParameter.ParameterName = "@NewStudentName";
-      newStudentIdParameter.Value = newStudentName;
-      cmd.Parameters.Add(newStudentIdParameter);
+       var newStudentIdParameter = new SqlParameter();
+       newStudentIdParameter.ParameterName = "@NewStudentName";
+       newStudentIdParameter.Value = newStudentName;
+       cmd.Parameters.Add(newStudentIdParameter);
 
-      var studentIdParameter = new SqlParameter();
-      studentIdParameter.ParameterName = "@StudentId";
-      studentIdParameter.Value = this.GetId();
-      cmd.Parameters.Add(studentIdParameter);
-      rdr = cmd.ExecuteReader();
+       var studentIdParameter = new SqlParameter();
+       studentIdParameter.ParameterName = "@StudentId";
+       studentIdParameter.Value = this.GetId();
+       cmd.Parameters.Add(studentIdParameter);
+       rdr = cmd.ExecuteReader();
 
-      while(rdr.Read())
-      {
-        this._student_name = rdr.GetString(0);
-      }
+       while(rdr.Read())
+       {
+         this._student_name = rdr.GetString(0);
+       }
 
-      if(rdr != null)
-      {
-        rdr.Close();
-      }
+       if(rdr != null)
+       {
+         rdr.Close();
+       }
 
-      if(conn != null)
-      {
-        conn.Close();
-      }
-    }
+       if(conn != null)
+       {
+         conn.Close();
+       }
+     }
 
     public void Delete()
     {

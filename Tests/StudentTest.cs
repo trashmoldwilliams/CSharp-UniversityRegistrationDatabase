@@ -87,88 +87,88 @@ namespace Program.Objects.Students_Courses
 
       Assert.Equal(testCourseList, resultCourseList);
     }
+
+    [Fact]
+    public void Test_Update_UpdatesStudentInDataBase()
+    {
+      string name = "Roger";
+      var testStudent = new Student(name, new DateTime(1900,1,1));
+      testStudent.Save();
+
+      string newName = "Snoop Dog";
+      testStudent.Update(newName, new DateTime(1900,1,1));
+      string result = testStudent.GetName();
+
+      Assert.Equal(newName, result);
+    }
     //
-    // [Fact]
-    // public void Test_Update_UpdatesStylistInDataBase()
-    // {
-    //   string name = "Roger";
-    //   var testStylist = new Stylist(name);
-    //   testStylist.Save();
-    //
-    //   string newName = "Snoop Dog";
-    //   testStylist.Update(newName);
-    //   string result = testStylist.GetName();
-    //
-    //   Assert.Equal(newName, result);
-    // }
-    //
-    // [Fact]
-    // public void Test_Delete_DeletesStylistsFromDataBase()
-    // {
-    //   string nameOne = "Ice Cube";
-    //   var testStylistOne = new Stylist(nameOne);
-    //   testStylistOne.Save();
-    //
-    //   string nameTwo = "Mashal Mathers";
-    //   var testStylistTwo = new Stylist(nameTwo);
-    //   testStylistTwo.Save();
-    //
-    //   testStylistOne.Delete();
-    //   var resultStylists = Stylist.GetAll();
-    //   var testStylistList = new List<Stylist> {testStylistTwo};
-    //
-    //   Assert.Equal(testStylistList, resultStylists);
-    //
-    // }
-    // [Fact]
-    // public void Test_AddClient_AddClientToStylist()
-    // {
-    //   Stylist testStylist = new Stylist("Harry Styles");
-    //   testStylist.Save();
-    //
-    //   Stylist testStylist2 = new Stylist("Billy Ray Cyrus");
-    //   testStylist2.Save();
-    //
-    //   Client testClient = new Client("Zayne");
-    //   testClient.Save();
-    //
-    //   Client testClient2 = new Client("Zack and Cody");
-    //   testClient2.Save();
-    //
-    //   testStylist.AddClients(testClient);
-    //   testStylist.AddClients(testClient2);
-    //
-    //   List<Client> result = testStylist.GetClients();
-    //   List<Client> testList = new List<Client> {testClient, testClient2};
-    //
-    //   Assert.Equal(testList, result);
-    // }
-    //
-    // [Fact]
-    // public void Test_GetClients_ReturnsAllStylistsClients()
-    // {
-    //   Stylist testStylist = new Stylist("Tim");
-    //   testStylist.Save();
-    //
-    //   Client testClient1 = new Client("Andrew");
-    //   testClient1.Save();
-    //
-    //   Client testClient2 = new Client("Thea");
-    //   testClient2.Save();
-    //
-    //   testStylist.AddClients(testClient1);
-    //   List<Client> savedClients = testStylist.GetClients();
-    //   List<Client> testList = new List<Client> {testClient1};
-    //
-    //   Assert.Equal(testList, savedClients);
-    //
-    // }
+    [Fact]
+    public void Test_Delete_DeletesStudentsFromDataBase()
+    {
+      string nameOne = "Ice Cube";
+      var testStudentOne = new Student(nameOne, new DateTime(1900,1,1));
+      testStudentOne.Save();
+
+      string nameTwo = "Mashal Mathers";
+      var testStudentTwo = new Student(nameTwo, new DateTime(1900,1,1));
+      testStudentTwo.Save();
+
+      testStudentOne.Delete();
+      var resultStudents = Student.GetAll();
+      var testStudentList = new List<Student> {testStudentTwo};
+
+      Assert.Equal(testStudentList, resultStudents);
+
+    }
+    [Fact]
+    public void Test_AddCourse_AddCourseToStudent()
+    {
+      Student testStudent = new Student("Harry Styles", new DateTime(1900,1,1));
+      testStudent.Save();
+
+      Student testStudent2 = new Student("Billy Ray Cyrus", new DateTime(1900,1,1));
+      testStudent2.Save();
+
+      Course testCourse = new Course("Zayne", "101");
+      testCourse.Save();
+
+      Course testCourse2 = new Course("Zack and Cody", "102");
+      testCourse2.Save();
+
+      testStudent.AddCourses(testCourse);
+      testStudent.AddCourses(testCourse2);
+
+      List<Course> result = testStudent.GetCourses();
+      List<Course> testList = new List<Course> {testCourse, testCourse2};
+
+      Assert.Equal(testList, result);
+    }
+
+    [Fact]
+    public void Test_GetCourses_ReturnsAllStudentsCourses()
+    {
+      Student testStudent = new Student("Tim", new DateTime(1900,1,1));
+      testStudent.Save();
+
+      Course testCourse1 = new Course("Andrew", "101");
+      testCourse1.Save();
+
+      Course testCourse2 = new Course("Thea", "102");
+      testCourse2.Save();
+
+      testStudent.AddCourses(testCourse1);
+      List<Course> savedCourses = testStudent.GetCourses();
+      List<Course> testList = new List<Course> {testCourse1};
+
+      Assert.Equal(testList, savedCourses);
+
+    }
 
     //Leave at bottom of test
     public void Dispose()
     {
       Student.DeleteAll();
-      // Course.DeleteAll();
+      Course.DeleteAll();
     }
   }
 }

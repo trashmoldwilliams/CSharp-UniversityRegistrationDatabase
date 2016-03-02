@@ -142,6 +142,7 @@ namespace Program.Objects.Students_Courses
       {
         foundCourseId = rdr.GetInt32(0);
         foundCourseName = rdr.GetString(1);
+        foundCourseNumber = rdr.GetString(2);
       }
 
       var foundCourse = new Course(foundCourseName, foundCourseNumber, foundCourseId);
@@ -165,7 +166,7 @@ namespace Program.Objects.Students_Courses
       SqlDataReader rdr;
       conn.Open();
 
-      var cmd = new SqlCommand("UPDATE courses SET course_name = @NewName OUTPUT INSERTED.course_name WHERE id = @CourseId; UPDATE courses SET course_number = @NewNumber OUTPUT INSERTED.course_number WHERE id = @CourseId", conn);
+      var cmd = new SqlCommand("UPDATE courses SET name = @NewName OUTPUT INSERTED.name WHERE id = @CourseId; UPDATE courses SET number = @NewNumber OUTPUT INSERTED.number WHERE id = @CourseId", conn);
 
       var newNameParameter = new SqlParameter();
       newNameParameter.ParameterName = "@NewName";

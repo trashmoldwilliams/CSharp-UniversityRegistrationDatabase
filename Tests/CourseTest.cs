@@ -1,157 +1,163 @@
-// using Xunit;
-// using System.Collections.Generic;
-// using System;
-// using System.Data;
-// using System.Data.SqlClient;
+using Xunit;
+using System.Collections.Generic;
+using System;
+using System.Data;
+using System.Data.SqlClient;
+
+namespace Program.Objects.Students_Courses
+{
+  public class CourseTest : IDisposable
+  {
+    public void CourseTestDB()
+    {
+      DBConfiguration.ConnectionString = "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=UniversityReg_test;Integrated Security=SSPI;";
+    }
+
+    [Fact]
+    public void Test_CoursesEmptyAtFirst()
+    {
+      int result = Course.GetAll().Count;
+
+      Assert.Equal(0, result);
+    }
 //
-// namespace Program.Objects.Stylist_Clients
-// {
-//   public class ClientTest : IDisposable
-//   {
-//     public void ClientTestDB()
-//     {
-//       DBConfiguration.ConnectionString = "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=hair_salon_test;Integrated Security=SSPI;";
-//     }
+    [Fact]
+    public void Test_EqualOverride_TrueForSameName()
+    {
+      var courseOne = new Course("History", "101");
+      var courseTwo = new Course("History", "101");
+
+      Assert.Equal(courseOne, courseTwo);
+    }
 //
-//     [Fact]
-//     public void Test_ClientsEmptyAtFirst()
-//     {
-//       int result = Client.GetAll().Count;
+    [Fact]
+    public void Test_Save_SavesCourseDataBase()
+    {
+      var testCourse = new Course("Women Studies", "301");
+      testCourse.Save();
+
+      var testList = new List<Course>{testCourse};
+      var result = Course.GetAll();
+
+      Assert.Equal(testList, result);
+    }
+
+    [Fact]
+    public void Test_SaveAssignsIdToOBjects()
+    {
+      var testCourse = new Course("Math", "404");
+      testCourse.Save();
+
+      var savedCourse = Course.GetAll()[0];
+
+      int result = savedCourse.GetId();
+      int testId = testCourse.GetId();
+
+      Assert.Equal(testId, result);
+    }
+
+    [Fact]
+    public void Test_FindCourseInDataBase()
+    {
+      var testCourse = new Course("Fun Studies", "999");
+      testCourse.Save();
+
+      var foundCourse = Course.Find(testCourse.GetId());
+
+      Assert.Equal(testCourse, foundCourse);
+    }
+
+    [Fact]
+    public void Test_Update_UpdatesCourseInDataBase()
+    {
+      var courseNameOne = "Underwater basket weaving";
+      var courseNumberOne = "101";
+      var testCourse = new Course(courseNameOne,courseNumberOne );
+      testCourse.Save();
+
+      var courseNameTwo = "History";
+      var courseNumberTwo = "101";
+      testCourse.Update(courseNameTwo, courseNumberTwo);
+
+      Course result = new Course(testCourse.GetName(), testCourse.GetNumber());
+      Course newCourse = new Course(courseNameTwo, courseNumberTwo);
+
+      Console.WriteLine("result name: " + result.GetName());
+      Console.WriteLine("result name: " + result.GetNumber());
+      Console.WriteLine("newCourse name: " + newCourse.GetName());
+      Console.WriteLine("newCourse name: " + newCourse.GetNumber());
+
+      Assert.Equal(newCourse, result);
+    }
 //
-//       Assert.Equal(0, result);
-//     }
+    [Fact]
+    public void Test_Delete_DeletesCourseFromDatabase()
+    {
+
+      string nameOne = "Winnie";
+      Student testStudent1 = new Student(nameOne, new DateTime(1900,1,1));
+      testStudent1.Save();
+
+      Course testCourse1 = new Course("Piglet", "101");
+      testCourse1.Save();
+      Course testCourse2 = new Course("Roo", "102");
+      testCourse2.Save();
+
+      testStudent1.AddCourses(testCourse1);
+      testStudent1.AddCourses(testCourse2);
+
+      testCourse1.Delete();
+      List<Course> resultCourses = testStudent1.GetCourses();
+      List<Course> testCourseList = new List<Course> {testCourse2};
+
+      Console.WriteLine(resultCourses);
+      Assert.Equal(testCourseList, resultCourses);
+    }
+    [Fact]
+    public void Test_AddStudent_AddsStudentToCourse()
+    {
+      //Arrange
+      Course testCourse = new Course("Theology", "326");
+      testCourse.Save();
+
+      Student testStudent = new Student("Superman", new DateTime(2011,1,1));
+      testStudent.Save();
+
+      //Act
+      testCourse.AddStudent(testStudent);
+
+      List<Student> result = testCourse.GetStudents();
+      List<Student> testList = new List<Student>{testStudent};
+
+      //Assert
+      Assert.Equal(testList, result);
+    }
+    [Fact]
+    public void Test_GetStudent_ReturnsAllCourseStudents()
+    {
+      //Arrange
+      Course testCourse = new Course("Cooking", "515");
+      testCourse.Save();
+
+      Student testStudent1 = new Student("Bob the builder", new DateTime(1795,1,1));
+      testStudent1.Save();
+
+      Student testStudent2 = new Student("Peter", new DateTime(1964, 2, 2));
+      testStudent2.Save();
+
+      //Act
+      testCourse.AddStudent(testStudent1);
+      List<Student> result = testCourse.GetStudents();
+      List<Student> testList = new List<Student> {testStudent1};
+
+      //Assert
+      Assert.Equal(testList, result);
+    }
 //
-//     [Fact]
-//     public void Test_EqualOverrie_TrueForSameName()
-//     {
-//       var clientOne = new Client("Wolverine");
-//       var clientTwo = new Client("Wolverine");
-//
-//       Assert.Equal(clientOne, clientTwo);
-//     }
-//
-//     [Fact]
-//     public void Test_Save_SavesClientDataBase()
-//     {
-//       var testClient = new Client("Batman");
-//       testClient.Save();
-//
-//       var testList = new List<Client>{testClient};
-//       var result = Client.GetAll();
-//
-//       Assert.Equal(testList, result);
-//     }
-//
-//     [Fact]
-//     public void Test_SaveAssignsIdToOBjects()
-//     {
-//       var testClient = new Client("Blade");
-//       testClient.Save();
-//
-//       var savedClient = Client.GetAll()[0];
-//
-//       int result = savedClient.GetId();
-//       int testId = testClient.GetId();
-//
-//       Assert.Equal(testId, result);
-//     }
-//
-//     [Fact]
-//     public void Test_FindClientInDataBase()
-//     {
-//       var testClient = new Client("Timone");
-//       testClient.Save();
-//
-//       var foundClient = Client.Find(testClient.GetId());
-//
-//       Assert.Equal(testClient, foundClient);
-//     }
-//
-//     [Fact]
-//     public void Test_Update_UpdatesClientInDataBase()
-//     {
-//       string name = "Poomba";
-//       var testClient = new Client(name);
-//       testClient.Save();
-//
-//       string newName = "Simba";
-//       testClient.Update(newName);
-//
-//       Client result = new Client(testClient.GetName());
-//       Client newClient = new Client(newName);
-//       // string result = testClient.GetName();
-//
-//       Assert.Equal(newClient, result);
-//     }
-//
-//     [Fact]
-//     public void Test_Delete_DeletesClientFromDatabase()
-//     {
-//
-//       string nameOne = "Winnie";
-//       Stylist testStylist1 = new Stylist(nameOne);
-//       testStylist1.Save();
-//
-//       Client testClient1 = new Client("Piglet");
-//       testClient1.Save();
-//       Client testClient2 = new Client("Roo");
-//       testClient2.Save();
-//
-//
-//       testClient1.Delete();
-//       List<Client> resultClients = testStylist1.GetClients();
-//       List<Client> testClientList = new List<Client> {testClient2};
-//       // Console.WriteLine("RESULT CLIENTS: " + resultClients);
-//       // Console.WriteLine(testClientList[0].GetName());
-//       Console.WriteLine("TEST CLIENT LIST: " + testClientList[0].GetName());
-//       Assert.Equal(testClientList, resultClients);
-//     }
-//     [Fact]
-//     public void Test_AddStylist_AddsStylistToClient()
-//     {
-//       //Arrange
-//       Client testClient = new Client("Cinammon guy");
-//       testClient.Save();
-//
-//       Stylist testStylist = new Stylist("Wonder woman");
-//       testStylist.Save();
-//
-//       //Act
-//       testClient.AddStylist(testStylist);
-//
-//       List<Stylist> result = testClient.GetStylists();
-//       List<Stylist> testList = new List<Stylist>{testStylist};
-//
-//       //Assert
-//       Assert.Equal(testList, result);
-//     }
-//     [Fact]
-//     public void Test_GetStylists_ReturnsAllClientStylists()
-//     {
-//       //Arrange
-//       Client testClient = new Client("Billy the goat");
-//       testClient.Save();
-//
-//       Stylist testStylist1 = new Stylist("Bob the builder");
-//       testStylist1.Save();
-//
-//       Stylist testStylist2 = new Stylist("Hydroflask");
-//       testStylist2.Save();
-//
-//       //Act
-//       testClient.AddStylist(testStylist1);
-//       List<Stylist> result = testClient.GetStylists();
-//       List<Stylist> testList = new List<Stylist> {testStylist1};
-//
-//       //Assert
-//       Assert.Equal(testList, result);
-//     }
-//
-//     public void Dispose()
-//     {
-//       Stylist.DeleteAll();
-//       Client.DeleteAll();
-//     }
-//
-//   }
-// }
+    public void Dispose()
+    {
+      Student.DeleteAll();
+      Course.DeleteAll();
+    }
+  }
+}
